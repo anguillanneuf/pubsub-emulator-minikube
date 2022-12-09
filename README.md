@@ -35,6 +35,7 @@
    External Traffic Policy:  Cluster
    Events:                   <none>
    ```
+   ![image](Screen%20Shot%202022-12-09%20at%202.45.32%20PM.png)
 4. Assign an external IP address for the service.
    ```
    $ minikube service pubsub-service 
