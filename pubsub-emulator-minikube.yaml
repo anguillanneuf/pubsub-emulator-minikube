@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcp-emulator-deployment
+  labels:
+    app: pubsub
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pubsub
+  template:
+    metadata:
+      labels:
+        app: pubsub
+    spec:
+      containers:
+        - name: pubsub-emulator
+          image: gcr.io/google.com/cloudsdktool/cloud-sdk:411.0.0-emulators
+          command: ["gcloud", "beta", "emulators", "pubsub", "start"]
+          args: ["--project=abc", "--host-port=0.0.0.0:8085"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pubsub-service
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8008
+      targetPort: 8085
+      nodePort: 30001
+  selector:
+    app: pubsub
