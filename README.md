@@ -1,5 +1,7 @@
 # Use Pub/Sub Emulator in minikube
 
+**Note: Only one replica is currently supported. Experiment with using multiple replicas and mounting a persistent volume found in [`pv-experiment.yaml`](pv-experiment.yaml).**
+
 1. Follow minikube [documentation] to install and start minikube.
 2. In a terminal, apply minikube configuration to create deployment `gcp-emulator-deployment` and service `pubsub-service`.
    ```sh
@@ -13,7 +15,7 @@
    service/pubsub-service created
    ```
    Note: At the time of this `README.md` creation, `gcr.io/google.com/cloudsdktool/cloud-sdk:411.0.0-emulators` is used. Check for the latest release version in the public [container registry] for gcloud SDK.
-3. Because we set `replicas: 2`, check if both pods are running, i.e. pods have IP addresses assigned to them.
+3. Check if a pod is running, i.e. it should have an IP addresses assigned.
    ```
    $ kubectl get service
    $ kubectl describe service pubsub-service
@@ -30,12 +32,12 @@
    Port:                     <unset>  8008/TCP
    TargetPort:               8085/TCP
    NodePort:                 <unset>  30001/TCP
-   Endpoints:                172.17.0.4:8085,172.17.0.6:8085
+   Endpoints:                172.17.0.4:8085
    Session Affinity:         None
    External Traffic Policy:  Cluster
    Events:                   <none>
    ```
-   ![image](Amob9knTbGdgU8v.png)
+   ![image](chart.png)
 4. Assign an external IP address for the service.
    ```
    $ minikube service pubsub-service 
@@ -66,6 +68,14 @@
    python subscriber.py abc create my-sub
    python publisher.py abc publish one 
    ```
+
+## Experiment with persistent volume
+
+Using [`pv-experiment.yaml`](pv-experiment.yaml), I was able to mount a PV on each of the pods. I verified using the following command where `$POD` is the name of a running pod. However, when I interacted with `pubsub-service`, an existing topic could only be accessible some of the time, leading me to think that the different containers have no way of communicating to each other about the state of the message storage.
+
+```sh
+$ kubectl exec $POD -- ls -a /data/pv0001/
+```
 
 [documentation]: https://minikube.sigs.k8s.io/docs/start/
 [container registry]: https://pantheon.corp.google.com/gcr/images/google.com:cloudsdktool/GLOBAL/cloud-sdk?gcrImageListsize=30
