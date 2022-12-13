@@ -1,6 +1,6 @@
 # Use Pub/Sub Emulator in minikube
 
-**Note: Only one replica is currently supported. Experiment with using multiple replicas and mounting a persistent volume found in [`pv-experiment.yaml`](pv-experiment.yaml).**
+**Note: Only single-node one-pod deployment is currently supported.**
 
 1. Follow minikube [documentation] to install and start minikube.
 2. In a terminal, apply minikube configuration to create deployment `gcp-emulator-deployment` and service `pubsub-service`.
@@ -76,6 +76,8 @@ Using [`pv-experiment.yaml`](pv-experiment.yaml), I was able to mount a PV on ea
 ```sh
 $ kubectl exec $POD -- ls -a /data/pv0001/
 ```
+
+Conclusion: The Pub/Sub emulator is designed to work on a single machine. All the resources it creates (topics, subscriptions, snapshots, schemas) are simple Java hashmaps that don't communicate across machines. Therefore, using the emulator in a distributed way is not supported.
 
 [documentation]: https://minikube.sigs.k8s.io/docs/start/
 [container registry]: https://pantheon.corp.google.com/gcr/images/google.com:cloudsdktool/GLOBAL/cloud-sdk?gcrImageListsize=30
