@@ -80,4 +80,4 @@ $ kubectl exec $POD -- ls -a /data/pv0001/
 Conclusion: The Pub/Sub emulator is designed to work on a single machine. All the resources it creates (topics, subscriptions, snapshots, schemas) are simple Java hashmaps that don't communicate across machines. Therefore, using the emulator in a distributed way is not supported.
 
 [documentation]: https://minikube.sigs.k8s.io/docs/start/
-[container registry]: https://pantheon.corp.google.com/gcr/images/google.com:cloudsdktool/GLOBAL/cloud-sdk?gcrImageListsize=30
+[container registry]: https://console.cloud.google.com/gcr/images/google.com:cloudsdktool/GLOBAL/cloud-sdk?gcrImageListsize=30
