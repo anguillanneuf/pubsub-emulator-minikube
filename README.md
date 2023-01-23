@@ -65,8 +65,8 @@
    export PUBSUB_PROJECT_ID=abc
    export PUBSUB_EMULATOR_HOST=127.0.0.1:64274
    python publisher.py abc create my-topic
-   python subscriber.py abc create my-sub
-   python publisher.py abc publish one 
+   python subscriber.py abc create my-topic my-sub
+   python publisher.py abc publish my-topic 
    ```
 
 ## Experiment with persistent volume
