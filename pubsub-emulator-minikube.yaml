@@ -5,7 +5,7 @@ metadata:
   labels:
     app: pubsub
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: pubsub
