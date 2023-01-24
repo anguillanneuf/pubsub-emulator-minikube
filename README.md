@@ -1,4 +1,6 @@
-# Use Pub/Sub Emulator in minikube
+# Use Pub/Sub emulator in minikube
+
+Published on Medium [Use Pub/Sub emulator in minikube][Use Pub/Sub emulator in minikube].
 
 **Note: Only single-node one-pod deployment is currently supported.**
 
@@ -59,14 +61,25 @@
    ❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
    ```
 5. In a second terminal, set the correct environment variables in order to create a topic and subscription in the dummy project and test publishing and receiving messages. Set `PUBSUB_PROJECT_ID` to the same value used in [`pubsub-emulator-minikube.yaml`](pubsub-emulator-minikube.yaml). Set `PUBSUB_EMULATOR_HOST` to the external IP address of the `pubsub-service` (in the example this value is `127.0.0.1:64274`).
+   ```sh
+   $ git cloud https://github.com/googleapis/python-pubsub.git
+   $ cd python-pubsub/samples/snippets/
+   $ export PUBSUB_PROJECT_ID=abc
+   $ export PUBSUB_EMULATOR_HOST=127.0.0.1:64274
+   $ python -m pip install --upgrade google-cloud-pubsub
+   $ python publisher.py abc create my-topic
+   $ python subscriber.py abc create my-topic my-sub
+   $ python publisher.py abc publish my-topic 
    ```
-   git cloud https://github.com/googleapis/python-pubsub.git
-   cd python-pubsub/samples/snippets/
-   export PUBSUB_PROJECT_ID=abc
-   export PUBSUB_EMULATOR_HOST=127.0.0.1:64274
-   python publisher.py abc create my-topic
-   python subscriber.py abc create my-topic my-sub
-   python publisher.py abc publish my-topic 
+
+6. Clean up. 
+   ```sh
+   $ minikube stop
+   $ docker ps
+   $ docker ps -a
+   $ docker rm $(CONTAINER_ID)
+   $ docker images
+   $ docker rmi $(IMAGE_ID)
    ```
 
 ## Experiment with persistent volume
@@ -79,5 +92,6 @@ $ kubectl exec $POD -- ls -a /data/pv0001/
 
 Conclusion: The Pub/Sub emulator is designed to work on a single machine. All the resources it creates (topics, subscriptions, snapshots, schemas) are simple Java hashmaps that don't communicate across machines. Therefore, using the emulator in a distributed way is not supported.
 
+[Use Pub/Sub emulator in minikube]: https://medium.com/google-cloud/use-pub-sub-emulator-in-minikube-67cd1f289daf
 [documentation]: https://minikube.sigs.k8s.io/docs/start/
 [container registry]: https://console.cloud.google.com/gcr/images/google.com:cloudsdktool/GLOBAL/cloud-sdk?gcrImageListsize=30
